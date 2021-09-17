@@ -39,10 +39,8 @@ class TaskAdmin(DjangoMpttAdmin):
 
     def submit_schedule(self,request,obj):
         try:
-            # from BLL.taskProcess import AddAll2TaskQueue
-            # result=AddAll2TaskQueue(request.user.username)
-            from demo.tasks import Add2AllTaskQueue
-            result = Add2AllTaskQueue.delay(request.user.username)
+            from demo.tasks import share_task
+            result = share_task.delay(request.user.username)
             self.message_user(request, '提交任务成功，请稍后去“任务执行状态”页面检查确认。')
         except:
             import traceback

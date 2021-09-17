@@ -6,7 +6,7 @@ app=Celery()
 
 # let celery workers take and do the work
 @shared_task
-def share_task():
+def share_task(username=None):
     # your code here
     try:
         pass
