@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'djcelery',
     'django_mptt_admin',
-
+    'compressor',
 ]
 
 REST_FRAMEWORK = {
@@ -136,10 +136,29 @@ USE_TZ = False
 TIME_ZONE = 'Asia/Shanghai'
 
 # Static files (CSS, JavaScript, Images)
+COMPRESS_ENABLED=True
+COMPRESS_OFFLINE = True
+COMPRESS_CSS_FILTERS = [
+    #creates absolute urls from relative ones
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    #css minimizer
+    'compressor.filters.cssmin.CSSMinFilter'
+]
+COMPRESS_JS_FILTERS = [
+    'compressor.filters.jsmin.JSMinFilter'
+]
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+)
+
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, STATIC_URL)
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -280,3 +299,8 @@ CELERYD_FORCE_EXECV = True
 CELERYD_TASK_TIME_LIMIT = 7200
 CELERY_TASK_RESULT_EXPIRES = None
 CELERY_RESULT_PERSISTENT = True
+
+# optional. for tasks monitors
+CELERY_SEND_EVENTS=True
+CELERY_SEND_TASK_SENT_EVENT=True
+CELERY_TRACK_STARTED=True
