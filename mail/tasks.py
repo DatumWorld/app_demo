@@ -9,6 +9,7 @@ app=Celery()
 def mail_task(ids):
     # mail code here
     try:
+        # from common.mail import mail...
         pass
         return True
     except:

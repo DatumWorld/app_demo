@@ -47,7 +47,8 @@ class MailTaskListAdmin(admin.ModelAdmin):
             action_ids=list(request.POST.getlist('_selected_action'))
             action_ids.reverse()
             # mail code here.
-
+            from tasks import mail_task
+            mail_task.delay(action_ids)
             self.message_user(request,'发送成功。以收件人确认收到为准')
         except:
             self.message_user(request,'出现错误。需手动确认是否发送成功')
