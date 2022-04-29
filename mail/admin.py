@@ -36,8 +36,8 @@ class MailTaskListAdmin(admin.ModelAdmin):
             action_ids.reverse()
             # mail code here. with Celery
             from tasks import mail_task
-            mail_task.delay(action_ids)
-            self.message_user(request,'添加到任务队列成功。请稍后查看结果')
+            result=mail_task.delay(action_ids)
+            self.message_user(request,f'''{result/len(action_ids)} 添加到任务队列成功。请稍后查看结果''')
         except:
             self.message_user(request,'添加到任务队列失败。')
     add2mailQueue.short_description = "添加到任务队列"

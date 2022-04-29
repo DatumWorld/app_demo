@@ -1,14 +1,21 @@
-﻿import smtplib
+﻿import datetime
+import smtplib
+import traceback
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.header import Header
 
 
-def mail(To, CC, Subject, Content, mail_user, mail_pass, mail_host):
+def mail(Subject: str, To: str, CC: str = None, Content: str = None, mail_user: str = None, mail_pass: str = None,
+         mail_host: str = None):
+    """
+    Usage:send mail
+    params:
+    mail_host  # 设置第三方SMTP 服务器主机
+    mail_user  # 发件人 用户名
+    mail_pass  # 发件人口令
+    """
     try:
-        mail_host = mail_host  # 设置第三方SMTP 服务器主机
-        mail_user = mail_user  # 发件人 用户名
-        mail_pass = mail_pass  # 发件人口令
         split = ','
         receivers = []
         if To:  # 收件人
@@ -33,5 +40,9 @@ def mail(To, CC, Subject, Content, mail_user, mail_pass, mail_host):
         smtpObj.login(mail_user, mail_pass)  # 登录
         smtpObj.sendmail(mail_user, receivers, message.as_string())  # 发送
         smtpObj.quit()  # 退出
+        return True
     except:
-        print("Error: SEND FAIL")
+        error = traceback.format_exc()
+        print(f'''{datetime.datetime.now()}\n{Subject}\n{error}''',
+              file=open('/log/mailError.txt', mode='a', encoding='utf-8'))
+        return False
